@@ -1,7 +1,7 @@
 {
   "name": "shepherd",
   "main": "shepherd.js",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "homepage": "https://github.com/HubSpot/shepherd",
   "authors": [
     "Zack Bloom <zackbloom@gmail.com>",
@@ -17,6 +17,8 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
+    "coffee/*.coffee",
+    "gulpfile.coffee",
     "node_modules",
     "bower_components",
     "test",
