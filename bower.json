@@ -18,6 +18,7 @@
   "ignore": [
     "**/.*",
     "coffee/*.coffee",
+    "welcome/coffee/*.coffee",
     "gulpfile.coffee",
     "node_modules",
     "bower_components",
