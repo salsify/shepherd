@@ -1468,8 +1468,8 @@ return this.Tether;
   };
 
   matchesSelector = function(el, sel) {
-    var matches, _ref1, _ref2, _ref3, _ref4;
-    matches = (_ref1 = (_ref2 = (_ref3 = (_ref4 = el.matches) != null ? _ref4 : el.matchesSelector) != null ? _ref3 : el.webkitMatchesSelector) != null ? _ref2 : el.mozMatchesSelector) != null ? _ref1 : el.oMatchesSelector;
+    var matches, _ref1, _ref2, _ref3, _ref4, _ref5;
+    matches = (_ref1 = (_ref2 = (_ref3 = (_ref4 = (_ref5 = el.matches) != null ? _ref5 : el.matchesSelector) != null ? _ref4 : el.webkitMatchesSelector) != null ? _ref3 : el.mozMatchesSelector) != null ? _ref2 : el.oMatchesSelector) != null ? _ref1 : el.msMatchesSelector;
     return matches.call(el, sel);
   };
 
@@ -1522,7 +1522,7 @@ return this.Tether;
           this.on(event, handler, this);
         }
       }
-      return (_base = this.options).buttons != null ? (_base = this.options).buttons : _base.buttons = [
+      return (_base = this.options).buttons != null ? _base.buttons : _base.buttons = [
         {
           text: 'Next',
           action: this.tour.next
@@ -1535,23 +1535,24 @@ return this.Tether;
     };
 
     Step.prototype.bindAdvance = function() {
-      var event, handler, selector, _ref1,
-        _this = this;
+      var event, handler, selector, _ref1;
       _ref1 = parseShorthand(this.options.advanceOn, ['selector', 'event']), event = _ref1.event, selector = _ref1.selector;
-      handler = function(e) {
-        if (!_this.isOpen()) {
-          return;
-        }
-        if (selector != null) {
-          if (matchesSelector(e.target, selector)) {
-            return _this.tour.next();
+      handler = (function(_this) {
+        return function(e) {
+          if (!_this.isOpen()) {
+            return;
           }
-        } else {
-          if (_this.el && e.target === _this.el) {
-            return _this.tour.next();
+          if (selector != null) {
+            if (matchesSelector(e.target, selector)) {
+              return _this.tour.next();
+            }
+          } else {
+            if (_this.el && e.target === _this.el) {
+              return _this.tour.next();
+            }
           }
-        }
-      };
+        };
+      })(this);
       document.body.addEventListener(event, handler);
       return this.on('destroy', function() {
         return document.body.removeEventListener(event, handler);
@@ -1602,7 +1603,6 @@ return this.Tether;
     };
 
     Step.prototype.show = function() {
-      var _this = this;
       if (this.el == null) {
         this.render();
       }
@@ -1610,9 +1610,11 @@ return this.Tether;
       document.body.setAttribute('data-shepherd-step', this.id);
       this.setupTether();
       if (this.options.scrollTo) {
-        setTimeout(function() {
-          return _this.scrollTo();
-        });
+        setTimeout((function(_this) {
+          return function() {
+            return _this.scrollTo();
+          };
+        })(this));
       }
       return this.trigger('show');
     };
@@ -1715,16 +1717,16 @@ return this.Tether;
     };
 
     Step.prototype.bindCancelLink = function(link) {
-      var _this = this;
-      return link.addEventListener('click', function(e) {
-        e.preventDefault();
-        return _this.cancel();
-      });
+      return link.addEventListener('click', (function(_this) {
+        return function(e) {
+          e.preventDefault();
+          return _this.cancel();
+        };
+      })(this));
     };
 
     Step.prototype.bindButtonEvents = function(cfg, el) {
-      var event, handler, page, _ref1,
-        _this = this;
+      var event, handler, page, _ref1;
       if (cfg.events == null) {
         cfg.events = {};
       }
@@ -1736,9 +1738,11 @@ return this.Tether;
         handler = _ref1[event];
         if (typeof handler === 'string') {
           page = handler;
-          handler = function() {
-            return _this.tour.show(page);
-          };
+          handler = (function(_this) {
+            return function() {
+              return _this.tour.show(page);
+            };
+          })(this);
         }
         el.addEventListener(event, handler);
       }
@@ -1762,8 +1766,7 @@ return this.Tether;
     __extends(Tour, _super);
 
     function Tour(options) {
-      var event, _fn, _i, _len, _ref1, _ref2,
-        _this = this;
+      var event, _fn, _i, _len, _ref1, _ref2;
       this.options = options != null ? options : {};
       this.hide = __bind(this.hide, this);
       this.complete = __bind(this.complete, this);
@@ -1772,15 +1775,17 @@ return this.Tether;
       this.next = __bind(this.next, this);
       this.steps = (_ref1 = this.options.steps) != null ? _ref1 : [];
       _ref2 = ['complete', 'cancel', 'hide', 'start', 'show', 'active', 'inactive'];
-      _fn = function(event) {
-        return _this.on(event, function(opts) {
-          if (opts == null) {
-            opts = {};
-          }
-          opts.tour = _this;
-          return Shepherd.trigger(event, opts);
-        });
-      };
+      _fn = (function(_this) {
+        return function(event) {
+          return _this.on(event, function(opts) {
+            if (opts == null) {
+              opts = {};
+            }
+            opts.tour = _this;
+            return Shepherd.trigger(event, opts);
+          });
+        };
+      })(this);
       for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
         event = _ref2[_i];
         _fn(event);

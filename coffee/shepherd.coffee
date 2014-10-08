@@ -14,7 +14,7 @@ createFromHTML = (html) ->
   el.children[0]
 
 matchesSelector = (el, sel) ->
-  matches = el.matches ? el.matchesSelector ? el.webkitMatchesSelector ? el.mozMatchesSelector ? el.oMatchesSelector
+  matches = el.matches ? el.matchesSelector ? el.webkitMatchesSelector ? el.mozMatchesSelector ? el.oMatchesSelector ? el.msMatchesSelector
   return matches.call(el, sel)
 
 parseShorthand = (obj, props) ->
